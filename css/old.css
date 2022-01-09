@@ -1,0 +1,47 @@
+body {
+    overflow-x: hidden;
+    background-color: #040c1f;
+    text-align: center;
+}
+h1 {
+    color: #05f2f2;
+}
+.page-header {
+    border-bottom: 1px solid #05f2f2;
+}
+input {
+    border: 1px solid #05f2f2!important;
+    background-color: hsla(0,0%,100%,.04)!important;
+    height: 40px!important;
+    font-size: 17px!important;
+    color: #05f2f2!important;
+}
+.btn-custom {
+    color: rgb(4, 12, 31);
+    background-color: #05f2f2;
+    border-color: #05f2f2;
+    font-size: 19px;
+    font-weight: 900;
+}
+
+
+@media screen and (max-width: 768px){
+    .container{
+        width:100%;
+        background-color: green;
+    }
+}
+/*pad: w >= 768  && w< 992*/
+@media screen and (max-width: 992px) and (min-width: 768px) {
+    .container{
+        width:750px;
+        background-color: blue;
+    }
+}
+/*中等屏幕   w >= 992  && w<1200*/
+@media screen and (max-width: 1200px) and (min-width: 992px) {
+    .container{
+        width:970px;
+        background-color: pink;
+    }
+}

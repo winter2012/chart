@@ -20,8 +20,25 @@ function getData($keywords){
     $xAxis = rtrim($xAxis, ", '") . "']";
     $yAxis = rtrim($yAxis, ", ") . "]";
     //echo $xAxis . PHP_EOL . $yAxis;die;
+    $keywords_sql = 'title="' . $keywords . '" && body="download"';
+    $url = "https://fofa.so/result?qbase64=".base64_encode($keywords_sql);
+    $size = get_size($keywords_sql);
+    print_span("fofa语法：", $keywords_sql);
+    print_span("查询时间：", date("Y-m-d H:i:s"));
+    print_span("时间跨度：", "显示一年内数据");
+    print_span("当前关键词：", $keywords);
+    print_span("当前匹配结果：", $size);
+    print_a($url);
     echo base_line_chart($keywords, $xAxis, $yAxis);
     echo base_bar_chart($keywords, $xAxis, $yAxis);
+}
+
+function print_span($key, $value){
+    echo '<div style="text-align: left;"><span class="info">'.$key.'<span style="color: #2e6cb2;">'.$value.'</span></span></div>';
+}
+
+function print_a($url){
+    echo '<div style="text-align: left;"><span class="info">进入fofa查看独立IP：</span><a class="btn btn-primary" href="'.$url.'">进入</a></div>';
 }
 
 /**
@@ -33,7 +50,7 @@ function getData($keywords){
 function base_line_chart($keywords, $xAxis, $yAxis){
     $echarts = "
 <script src='js/echarts.min.js'></script>
-<div id='baseLineChart' style='width: 900px;height:400px;margin-top:80px'></div>
+<div id='baseLineChart' style='width:38rem;height:28rem;margin-top:20px'></div>
 <script type='text/javascript'>
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('baseLineChart'));
@@ -68,7 +85,18 @@ function base_line_chart($keywords, $xAxis, $yAxis){
                 lineStyle:{
                     color: '#05f2f2',
                 }
-            }
+            },
+            axisLabel: {
+                formatter: function (value, index) {
+                    // value大于1000时除以1000并拼接k，小于1000按原格式显示
+                    if (value >= 1000) {
+                        value = value / 1000 + 'k';
+                    }else if(value < 1000){
+                        value;
+                    }
+                    return value;
+                }
+            },
         },
         series: [
             {
@@ -103,7 +131,7 @@ function base_line_chart($keywords, $xAxis, $yAxis){
 function base_bar_chart($keywords, $xAxis, $yAxis){
     $echarts = "
 <script src='js/echarts.min.js'></script>
-<div id='baseBarChart' style='width: 900px;height:400px;margin-top:80px'></div>
+<div id='baseBarChart' style='width:38rem;height:28rem;margin-top:20px'></div>
 <script type='text/javascript'>
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('baseBarChart'));
@@ -138,7 +166,18 @@ function base_bar_chart($keywords, $xAxis, $yAxis){
                 lineStyle:{
                     color: '#05f2f2',
                 }
-            }
+            },
+            axisLabel: {
+                formatter: function (value, index) {
+                    // value大于1000时除以1000并拼接k，小于1000按原格式显示
+                    if (value >= 1000) {
+                        value = value / 1000 + 'k';
+                    }else if(value < 1000){
+                        value;
+                    }
+                    return value;
+                }
+            },
         },
         series: [
             {
