@@ -16,12 +16,15 @@ function post_request($url, $data) {
 }
 
 function get_request($url){
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    $response = curl_exec($curl);
-    curl_close($curl);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_ENCODING, "");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_exec($ch);
+    $response = curl_multi_getcontent($ch);
+    curl_close($ch);
     return $response;
 }
 
@@ -42,11 +45,28 @@ function get_size($sql){
     return $data['size'];
 }
 
-function get_distinct_size($sql){
+function get_web_page($sql){
+    $data = base64_encode($sql);
     $base_url = "https://fofa.so/result?qbase64=";
-    $url = $base_url . $sql;
-    $content = get_request($url, '');
-    echo $content;
+    $url = $base_url . $data;
+    return get_request($url);
 }
 
-get_distinct_size("dGl0bGU9IuWtpuagoSIgJiYgYm9keT0iZG93bmxvYWQi");
+function get_match_size($keywords, $start_time, $end_time){
+    $keywords_sql = 'title="' . $keywords . '"';
+    $timing_sql = 'after="' . $start_time . '" && before="' . $end_time . '"';
+    $sql = $keywords_sql . ' && ' . $timing_sql;
+    $content = get_web_page($sql);
+    file_put_contents("fofa.txt", $content);
+
+    $rule = "/<span.*?class=\"pSpanColor\".*>.*?<\/span>/";
+    preg_match_all($rule, $content,$match);
+
+    $size_str = rtrim(substr(strstr($match[0][0],'class="pSpanColor">'),19),"</span>");
+    $size = str_replace(",","",$size_str);
+    return intval($size);
+}
+
+function get_distinct_ips(){
+
+}

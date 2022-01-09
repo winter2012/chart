@@ -1,34 +1,23 @@
 $(function () {
     $("#callback").click(function () {
-        var orderAmount = $("#orderAmount").val();
-        var prdOrdNo = $("#prdOrdNo").val();
-        var notifyUrl = $("#notifyUrl").val();
-        if(orderAmount === ""){
-            $("#message").show().html("请输入充值金额").css("color","red");
-            return false;
-        }
-        if(prdOrdNo === ""){
-            $("#message").show().html("请输入订单编号").css("color","red");
-            return false;
-        }
-        if(notifyUrl === ""){
-            $("#message").show().html("请输入回调地址").css("color","red");
+        let keywords = $("#keywords").val();
+        if(keywords === ""){
+            $("#message").show().html("请输入搜索关键词").css("color","red");
             return false;
         }
         $.ajax({
             type: "POST",
-            url: "controller/notify.php",
+            url: "echarts.php",
             beforeSend : hideMessage(),
             data: {
-                orderAmount: orderAmount,
-                prdOrdNo: prdOrdNo,
-                notifyUrl: notifyUrl
+                keywords: keywords
             },success:function (res) {
-                $("#message").show().html("返回信息:"+res).css("color","red");
+                $("#response").show().html(res);
             }
         });
     });
 });
 function hideMessage() {
     $("#message").hide();
+    return null;
 }
