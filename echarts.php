@@ -23,12 +23,14 @@ function getData($keywords){
     $keywords_sql = 'title="' . $keywords . '" && body="download"';
     $url = "https://fofa.so/result?qbase64=".base64_encode($keywords_sql);
     $size = get_size($keywords_sql);
+    echo '<div class="btn-group-justified"><div class="col-sm-offset-4 col-sm-4" style="text-align: left">';
     print_span("fofa语法：", $keywords_sql);
     print_span("查询时间：", date("Y-m-d H:i:s"));
     print_span("时间跨度：", "显示一年内数据");
     print_span("当前关键词：", $keywords);
     print_span("当前匹配结果：", $size);
     print_a($url);
+    echo '</div></div>';
     echo base_line_chart($keywords, $xAxis, $yAxis);
     echo base_bar_chart($keywords, $xAxis, $yAxis);
 }
